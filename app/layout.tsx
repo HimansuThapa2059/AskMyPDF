@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Poppins } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import Navbar from '@/components/Navbar';
 
 const poppins = Poppins({
   weight: ['400', '700'], // Specify the weights you want
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body
         className={cn('min-h-screen antialiased grainy', poppins.className)}
       >
+        <Navbar />
         {children}
       </body>
     </html>
