@@ -14,18 +14,16 @@ const Page = () => {
         const response = await fetch('/api/auth/callback');
         if (!response.ok) {
           if (response.status === 401) {
-            router.push('/sign-in-401');
+            router.push('/sign-in');
           } else {
             throw new Error('Server error');
           }
         } else {
-          const data = await response.json();
-          console.log('User data:', data);
           router.push(origin ? `/${origin}` : '/dashboard');
         }
       } catch (err) {
         console.error('Error during callback:', err);
-        router.push('/sign-in-err');
+        router.push('/sign-in-');
       }
     };
     handleAuthCallback();

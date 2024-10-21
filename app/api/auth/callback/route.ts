@@ -16,7 +16,7 @@ export async function GET() {
     });
 
     if (dbUser) {
-      return NextResponse.json(dbUser);
+      return NextResponse.json({ id: dbUser.id, email: dbUser.email });
     }
 
     const newDbUser = await prisma.user.create({
@@ -26,7 +26,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(newDbUser);
+    return NextResponse.json({ id: newDbUser.id, email: newDbUser.email });
   } catch (err: any) {
     console.error('Error in /api/callback:', err.message);
     return new NextResponse('Internal Server Error', { status: 500 });
