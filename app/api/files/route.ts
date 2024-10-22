@@ -7,7 +7,7 @@ export async function GET() {
     const { getUser } = getKindeServerSession();
     const user = await getUser();
 
-    if (!user.id || !user.email) {
+    if (!user || !user.id) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 

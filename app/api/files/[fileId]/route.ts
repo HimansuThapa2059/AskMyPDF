@@ -12,7 +12,7 @@ export async function DELETE(
 
     const { fileId } = params;
 
-    if (!user.id || !user.email) {
+    if (!user || !user.id) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
