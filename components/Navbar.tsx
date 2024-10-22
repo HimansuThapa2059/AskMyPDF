@@ -41,7 +41,7 @@ const Navbar = () => {
                     size: 'sm',
                   })}
                 >
-                  SignIn
+                  Sign In
                 </LoginLink>
               )}
 
@@ -60,8 +60,9 @@ const Navbar = () => {
               {isAuthenticated && (
                 <LogoutLink
                   className={buttonVariants({
-                    variant: 'ghost',
+                    variant: 'default',
                     size: 'sm',
+                    className: 'bg-rose-700 hover:bg-rose-700/90',
                   })}
                 >
                   Log out
