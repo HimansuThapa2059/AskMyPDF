@@ -3,7 +3,7 @@ export interface FileType {
   createdAt: Date;
   updatedAt: Date;
   name: string;
-  uploadStatus: 'PENDING' | 'PROCESSING' | 'FAILED' | 'SUCCESS';
+  uploadStatus: "PENDING" | "PROCESSING" | "FAILED" | "SUCCESS";
   url: string;
   key: string;
   userId: string | null;

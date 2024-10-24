@@ -68,13 +68,6 @@
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  /* border: 1px solid red; */
-}
-
 .max-container {
   @apply w-full mx-auto max-w-screen-2xl px-2.5 md:px-20;
 }
