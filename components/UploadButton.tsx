@@ -16,7 +16,11 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-const UploadDropzone = () => {
+interface UploadDropzoneProps {
+  closeDialog: () => void;
+}
+
+const UploadDropzone: React.FC<UploadDropzoneProps> = ({ closeDialog }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
@@ -53,9 +57,11 @@ const UploadDropzone = () => {
         const res = await startUpload(acceptedFiles);
 
         if (!res) {
+          closeDialog();
           return toast({
-            title: "Something went wrong",
-            description: "Please try again later",
+            title: "File Size Exceeded",
+            description:
+              "Consider upgrading your plan to upload larger PDF files",
             variant: "destructive",
           });
         }
@@ -65,6 +71,7 @@ const UploadDropzone = () => {
         const fileId = fileResponse.serverData.fileId;
 
         if (!fileId || !fileKey) {
+          closeDialog();
           return toast({
             title: "Something went wrong",
             description: "Please try again later",
@@ -145,13 +152,13 @@ const UploadDropzone = () => {
 const UploadButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen ? true : false} onOpenChange={setIsOpen}>
       <DialogTrigger onClick={() => setIsOpen(true)} asChild>
         <Button>Upload PDF</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle></DialogTitle> {/* no title */}
-        <UploadDropzone />
+        <UploadDropzone closeDialog={() => setIsOpen(false)} />
         <DialogDescription></DialogDescription> {/* no description */}
       </DialogContent>
     </Dialog>

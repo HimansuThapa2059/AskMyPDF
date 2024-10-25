@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextResponse } from "next/server";
+import { UTApi } from "uploadthing/server";
 
 export async function DELETE(
   req: Request,
@@ -25,12 +26,17 @@ export async function DELETE(
 
     if (!file) return new NextResponse("not-found", { status: 404 });
 
-    await prisma.file.delete({
+    // delete pdf from mongoDb
+    const { key } = await prisma.file.delete({
       where: {
         id: fileId,
         userId: user.id,
       },
     });
+
+    // delete pdf from uploadthing
+    const utapi = new UTApi();
+    await utapi.deleteFiles(key);
 
     return NextResponse.json(file);
   } catch (err: any) {

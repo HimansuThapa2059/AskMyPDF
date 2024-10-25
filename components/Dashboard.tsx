@@ -125,11 +125,16 @@ const Dashboard = () => {
                       className="w-full border border-rose-300 bg-transparent text-zinc-500 hover:bg-rose-100"
                     >
                       {currentlyDeletingFile === file.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Deleting</span>
+                        </>
                       ) : (
-                        <Trash className="h-4 w-4" stroke="red" />
+                        <>
+                          <Trash className="h-4 w-4" stroke="red" />
+                          <span>Delete</span>
+                        </>
                       )}
-                      <span>Delete</span>
                     </Button>
                   </div>
                 </li>

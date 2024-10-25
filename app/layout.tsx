@@ -4,7 +4,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
-import { ToastProvider } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   weight: ["400", "700"], // Specify the weights you want
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body
         className={cn("grainy min-h-screen antialiased", poppins.className)}
       >
-        <ToastProvider />
+        <Toaster />
         <Navbar />
         {children}
       </body>
