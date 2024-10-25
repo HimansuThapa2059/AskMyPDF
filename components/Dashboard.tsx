@@ -55,9 +55,9 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="mx-auto max-w-7xl md:p-10">
+    <main className="mx-auto max-w-[86rem] py-6 md:p-10">
       <div className="flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
-        <h1 className="mb-3 text-5xl font-bold text-gray-900">My Files</h1>
+        <h1 className="mb-3 text-5xl font-bold text-gray-900">My PDFs</h1>
         <UploadButton />
       </div>
 
@@ -98,7 +98,7 @@ const Dashboard = () => {
                       <div className="flex-1 truncate">
                         <div className="flex items-center space-x-3">
                           <h3 className="truncate text-lg font-medium text-zinc-900">
-                            {file.name}
+                            {file.name.slice(0, -4)}
                           </h3>
                         </div>
                       </div>

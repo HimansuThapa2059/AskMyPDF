@@ -69,7 +69,7 @@
 }
 
 .max-container {
-  @apply w-full mx-auto max-w-screen-2xl px-2.5 md:px-20;
+  @apply mx-auto w-full max-w-screen-2xl px-2.5 md:px-20;
 }
 
 .grainy {

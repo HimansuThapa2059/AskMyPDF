@@ -7,8 +7,8 @@ import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
-  weight: ["400", "700"], // Specify the weights you want
-  subsets: ["latin"], // Specify subsets (like latin)
+  weight: ["400", "700"],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -24,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn("grainy min-h-screen antialiased", poppins.className)}
+        className={cn(
+          "grainy min-h-screen text-black antialiased",
+          poppins.className,
+        )}
       >
         <Toaster />
         <Navbar />

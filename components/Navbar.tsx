@@ -1,24 +1,24 @@
-'use client';
+"use client";
 import {
   LoginLink,
   LogoutLink,
   RegisterLink,
   useKindeBrowserClient,
-} from '@kinde-oss/kinde-auth-nextjs';
-import Link from 'next/link';
-import React from 'react';
+} from "@kinde-oss/kinde-auth-nextjs";
+import Link from "next/link";
+import React from "react";
 
-import { buttonVariants } from './ui/button';
-import { ArrowRight } from 'lucide-react';
+import { buttonVariants } from "./ui/button";
+import { ArrowRight, LogOut } from "lucide-react";
 
 const Navbar = () => {
   const { isAuthenticated } = useKindeBrowserClient();
 
   return (
-    <nav className="sticky w-full h-14 inset-x-0 top-0  z-30 border-b border-gray-200 bg-white/75 transition-all backdrop-blur-lg">
+    <nav className="sticky inset-x-0 top-0 z-30 h-14 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <div className="max-container">
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-          <Link href="/" className="text-black font-semibold flex z-40">
+          <Link href="/" className="z-40 flex font-semibold text-black">
             AskMy<span className="text-indigo-600">PDF</span>
           </Link>
 
@@ -26,10 +26,10 @@ const Navbar = () => {
             <>
               <Link
                 className={buttonVariants({
-                  variant: 'ghost',
-                  size: 'sm',
+                  variant: "ghost",
+                  size: "sm",
                 })}
-                href={'/pricing'}
+                href={"/pricing"}
               >
                 Pricing
               </Link>
@@ -37,8 +37,8 @@ const Navbar = () => {
               {!isAuthenticated && (
                 <LoginLink
                   className={buttonVariants({
-                    variant: 'ghost',
-                    size: 'sm',
+                    variant: "ghost",
+                    size: "sm",
                   })}
                 >
                   Sign In
@@ -48,8 +48,8 @@ const Navbar = () => {
               {!isAuthenticated && (
                 <RegisterLink
                   className={buttonVariants({
-                    variant: 'default',
-                    size: 'sm',
+                    variant: "default",
+                    size: "sm",
                   })}
                 >
                   Get started
@@ -60,12 +60,13 @@ const Navbar = () => {
               {isAuthenticated && (
                 <LogoutLink
                   className={buttonVariants({
-                    variant: 'default',
-                    size: 'sm',
-                    className: 'bg-rose-700 hover:bg-rose-700/90',
+                    variant: "default",
+                    size: "sm",
+                    className: "bg-rose-700 hover:bg-rose-700/90",
                   })}
                 >
                   Log out
+                  <LogOut className="h-4 w-4" />
                 </LogoutLink>
               )}
             </>
