@@ -12,7 +12,7 @@ const page = async ({ params }: { params: { fileId: string } }) => {
 
   if (!user || !user.id) redirect(`/auth-callback?origin=dashboard/${fileId}`);
 
-  const file = prisma.file.findFirst({
+  const file = await prisma.file.findFirst({
     where: {
       id: fileId,
       userId: user.id,
@@ -27,7 +27,7 @@ const page = async ({ params }: { params: { fileId: string } }) => {
         {/* left side */}
         <div className="flex-1 xl:flex">
           <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
-            <PdfRenderer />
+            <PdfRenderer fileUrl={file.url} />
           </div>
         </div>
 

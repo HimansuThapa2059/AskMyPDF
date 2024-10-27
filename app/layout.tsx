@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "react-loading-skeleton/dist/skeleton.css";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
+import "react-loading-skeleton/dist/skeleton.css";
+import "simplebar-react/dist/simplebar.min.css";
+
+import Navbar from "@/components/Navbar";
 
 const poppins = Poppins({
   weight: ["400", "700"],
