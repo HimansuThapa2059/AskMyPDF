@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useResizeDetector } from "react-resize-detector";
-import { toast } from "@/hooks/use-toast";
 import {
   ChevronDown,
   ChevronUp,
@@ -30,6 +29,8 @@ import {
 } from "./ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import SimpleBar from "simplebar-react";
+import PdfFullscreen from "./PdfFullscreen";
+import { useToast } from "@/hooks/use-toast";
 // import "simplebar-react/dist/simplebar.min.css";
 
 const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
@@ -37,8 +38,12 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
   const [currPage, setCurrPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
+  const [renderedScale, setRenderedScale] = useState<number | null>(null);
+
+  const isLoading = renderedScale !== scale;
 
   const { width, ref } = useResizeDetector();
+  const { toast } = useToast();
 
   const pageValidation = z.object({
     pageNo: z
@@ -170,6 +175,8 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
           >
             <RotateCwIcon className="h-4 w-4" />
           </Button>
+
+          <PdfFullscreen fileUrl={fileUrl} />
         </div>
       </div>
 
@@ -197,12 +204,30 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
               }}
               className={"max-h-full"}
             >
+              {isLoading && renderedScale ? (
+                <Page
+                  width={width ? width : 1}
+                  pageNumber={currPage}
+                  scale={scale}
+                  key={"@" + renderedScale}
+                  rotate={rotation}
+                  className={"flex justify-center"}
+                />
+              ) : null}
+
               <Page
                 width={width ? width : 1}
                 pageNumber={currPage}
                 scale={scale}
+                key={"@" + scale}
                 rotate={rotation}
-                className={"flex justify-center"}
+                className={cn("flex justify-center", isLoading ? "hidden" : "")}
+                loading={
+                  <div className="flex min-h-[calc(100vh-10rem)] w-full items-center justify-center">
+                    <Loader2 className="h-14 w-14 animate-spin text-indigo-500" />
+                  </div>
+                }
+                onRenderSuccess={() => setRenderedScale(scale)}
               />
             </Document>
           </div>
