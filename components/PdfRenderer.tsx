@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useResizeDetector } from "react-resize-detector";
 import { toast } from "@/hooks/use-toast";
-import { ChevronDown, ChevronUp, Loader2, Search } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  RotateCwIcon,
+  Search,
+} from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -30,6 +36,7 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [currPage, setCurrPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);
+  const [rotation, setRotation] = useState<number>(0);
 
   const { width, ref } = useResizeDetector();
 
@@ -59,6 +66,7 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
 
   return (
     <div className="flex w-full flex-col items-center rounded-md bg-white shadow">
+      {/* For header section of PDF */}
       <div className="flex h-14 w-full items-center justify-between border-b border-zinc-200 px-2">
         <div className="flex items-center gap-1.5">
           <Button
@@ -66,7 +74,11 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
             aria-label="previous-page"
             disabled={currPage <= 1}
             onClick={() => {
-              setCurrPage((c) => (c - 1 > 1 ? c - 1 : 1));
+              setCurrPage((c) => {
+                const newPage = c - 1 > 1 ? c - 1 : 1;
+                setValue("pageNo", String(newPage));
+                return newPage;
+              });
             }}
           >
             <ChevronDown className="h-4 w-4" />
@@ -74,7 +86,6 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
 
           <div className="flex items-center gap-1.5">
             <Input
-              value={currPage}
               {...register("pageNo")}
               className={cn(
                 "h-8 w-10 focus-visible:ring-slate-300",
@@ -86,6 +97,7 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
                 }
               }}
             />
+
             <p className="space-x-1 text-sm text-zinc-700">
               <span>/</span>
               <span>{totalPages}</span>
@@ -97,7 +109,11 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
             aria-label="previous-page"
             disabled={currPage >= totalPages}
             onClick={() => {
-              setCurrPage((c) => (c + 1 > totalPages ? totalPages : c + 1));
+              setCurrPage((c) => {
+                const newPage = c + 1 > totalPages ? totalPages : c + 1;
+                setValue("pageNo", String(newPage));
+                return newPage;
+              });
             }}
           >
             <ChevronUp className="h-4 w-4" />
@@ -146,8 +162,18 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button
+            variant={"ghost"}
+            aria-label="rotate"
+            onClick={() => setRotation((cur) => (cur + 90) % 360)}
+          >
+            <RotateCwIcon className="h-4 w-4" />
+          </Button>
         </div>
       </div>
+
+      {/* For PDF Section */}
 
       <div className="max-h-[screen] w-full flex-1">
         <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)]">
@@ -155,8 +181,8 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
             <Document
               file={fileUrl}
               loading={
-                <div className="flex justify-center">
-                  <Loader2 className="my-24 h-6 w-6 animate-spin" />
+                <div className="flex min-h-[calc(100vh-10rem)] w-full items-center justify-center">
+                  <Loader2 className="h-14 w-14 animate-spin text-indigo-500" />
                 </div>
               }
               onLoadError={() =>
@@ -175,6 +201,7 @@ const PdfRenderer = ({ fileUrl }: { fileUrl: string }) => {
                 width={width ? width : 1}
                 pageNumber={currPage}
                 scale={scale}
+                rotate={rotation}
                 className={"flex justify-center"}
               />
             </Document>
