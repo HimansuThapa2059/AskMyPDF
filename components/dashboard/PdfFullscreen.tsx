@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Expand, Loader2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import SimpleBar from "simplebar-react";
 import { Document, Page } from "react-pdf";
 import { useToast } from "@/hooks/use-toast";

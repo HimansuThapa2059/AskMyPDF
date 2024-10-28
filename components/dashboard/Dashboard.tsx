@@ -14,7 +14,7 @@ import axios from "axios";
 import { FileArray } from "@/types/types";
 import { format } from "date-fns";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   const [files, setFiles] = useState<FileArray>([]);

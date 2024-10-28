@@ -45,34 +45,34 @@ export async function DELETE(
   }
 }
 
-// export async function GET(
-//   req: Request,
-//   { params }: { params: { key: string } },
-// ) {
-//   try {
-//     const { getUser } = getKindeServerSession();
-//     const user = await getUser();
+export async function GET(
+  req: Request,
+  { params }: { params: { fileId: string } },
+) {
+  try {
+    const { getUser } = getKindeServerSession();
+    const user = await getUser();
 
-//     const { key } = params;
+    const { fileId } = params;
 
-//     if (!key) return new NextResponse("key is missing", { status: 400 });
+    if (!user || !user.id) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-//     if (!user || !user.id) {
-//       return new NextResponse("Unauthorized", { status: 401 });
-//     }
+    const file = await prisma.file.findFirst({
+      where: {
+        id: fileId,
+        userId: user.id,
+      },
+    });
 
-//     const file = await prisma.file.findFirst({
-//       where: {
-//         userId: user.id,
-//         key,
-//       },
-//     });
+    if (!file) {
+      return NextResponse.json({ status: "PENDING" as const });
+    }
 
-//     if (!file) return new NextResponse("Not-found", { status: 404 });
-
-//     return NextResponse.json(file);
-//   } catch (err: any) {
-//     console.log("[getting-file]", err);
-//     throw new NextResponse("Internal server error", { status: 500 });
-//   }
-// }
+    return NextResponse.json({ status: file.uploadStatus });
+  } catch (err: any) {
+    console.log("[GET-fileStatus]", err);
+    throw new NextResponse("Internal server error", { status: 500 });
+  }
+}

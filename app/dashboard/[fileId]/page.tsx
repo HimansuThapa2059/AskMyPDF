@@ -1,5 +1,5 @@
-import ChatWrapper from "@/components/ChatWrapper";
-import PdfRenderer from "@/components/PdfRenderer";
+import ChatWrapper from "@/components/chat/ChatWrapper";
+import PdfRenderer from "@/components/dashboard/PdfRenderer";
 import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound, redirect } from "next/navigation";
@@ -33,7 +33,7 @@ const page = async ({ params }: { params: { fileId: string } }) => {
 
         {/* right side */}
         <div className="flex-[0.75] shrink-0 border-t border-gray-200 lg:w-96 lg:border-l lg:border-t-0">
-          <ChatWrapper />
+          <ChatWrapper fileId={fileId} />
         </div>
       </div>
     </div>
