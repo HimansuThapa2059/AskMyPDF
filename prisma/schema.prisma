@@ -15,18 +15,19 @@ datasource db {
 
 
 model User {
-  id                     String     @id @default(uuid()) @map("_id")
-  email                  String     @unique
+  id                        String      @id @default(uuid()) @map("_id")
+  email                     String      @unique
 
-  stripeCustomerId       String?    @unique @map("stripe_customer_id")
-  stripeSubscriptionId    String?   @unique @map("stripe_subscription_id")
-  stripePriceId          String?    @map("stripe_price_id")
-  stripeCurrentPeriodEnd  DateTime?  @map("stripe_current_period_end")
+  stripeCustomerId          String?     @unique @map("stripe_customer_id")
+  stripeSubscriptionId      String?     @unique @map("stripe_subscription_id")
+  stripePriceId             String?     @map("stripe_price_id")
+  stripeCurrentPeriodEnd    DateTime?   @map("stripe_current_period_end")
 
   files File[]
+  messages Message[]
   
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @updatedAt
 }
 
 enum UploadStatus {
@@ -37,13 +38,36 @@ enum UploadStatus {
 }
 
 model File {
-  id            String      @id @default(uuid()) @map("_id")
+  id            String        @id @default(uuid()) @map("_id")
   name          String
-  uploadStatus  UploadStatus @default(PENDING)
+  uploadStatus  UploadStatus  @default(PENDING)
   url           String
   key           String
+  messages      Message[]
+
+  userId        String?
+  user          User?         @relation(fields: [userId], references: [id])
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([id, userId])
+}
+
+model Message {
+  id            String      @id @default(uuid()) @map("_id")
+  
+  
+  text          String      @db.String()
+  isUserMessage Boolean
+
   userId        String?
   user          User?       @relation(fields: [userId], references: [id])
+
+
+  fileId        String?
+  file          File?       @relation(fields: [fileId], references: [id])
+
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
