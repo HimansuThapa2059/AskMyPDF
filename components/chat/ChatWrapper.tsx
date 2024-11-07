@@ -6,6 +6,7 @@ import axios from "axios";
 import { Loader2, MoveLeft, XCircle } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
+import { ChatContextProvider } from "./ChatContext";
 
 interface UploadStatus {
   status: "PROCESSING" | "SUCCESS" | "FAILED";
@@ -112,13 +113,15 @@ const ChatWrapper = ({ fileId }: { fileId: string }) => {
   }
 
   return (
-    <div className="relative flex min-h-full flex-col justify-between gap-2 divide-y divide-zinc-200 bg-zinc-50">
-      <div className="mb-28 flex flex-1 flex-col items-center justify-center">
-        <Messages />
-      </div>
+    <ChatContextProvider fileId={fileId}>
+      <div className="relative flex min-h-full flex-col justify-between gap-2 divide-y divide-zinc-200 bg-zinc-50">
+        <div className="mb-28 flex flex-1 flex-col items-center justify-center">
+          <Messages />
+        </div>
 
-      <ChatInput />
-    </div>
+        <ChatInput />
+      </div>
+    </ChatContextProvider>
   );
 };
 

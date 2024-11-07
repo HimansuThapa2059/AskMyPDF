@@ -2,6 +2,10 @@ import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { PineconeStore } from "@langchain/pinecone";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import { pc } from "@/lib/pinecone";
 
 const f = createUploadthing();
 
@@ -26,6 +30,45 @@ export const ourFileRouter = {
           uploadStatus: "PROCESSING",
         },
       });
+
+      try {
+        const response = await fetch(file.url);
+
+        const blob = await response.blob();
+        const loader = new PDFLoader(blob);
+
+        const pagelevelDocs = await loader.load();
+        const pageAmt = pagelevelDocs.length;
+
+        //vectorize and index the document
+        const pineconeIndex = pc.Index("askmypdf");
+
+        const embeddings = new GoogleGenerativeAIEmbeddings({
+          apiKey: process.env.GEMINI_API_KEY,
+          model: "text-embedding-004",
+        });
+
+        await PineconeStore.fromDocuments(pagelevelDocs, embeddings, {
+          //@ts-ignore
+          pineconeIndex,
+          namespace: newDbFile.id,
+        });
+
+        await prisma.file.update({
+          data: { uploadStatus: "SUCCESS" },
+          where: {
+            id: newDbFile.id,
+          },
+        });
+      } catch (error) {
+        console.log("error in core.ts" + error);
+        await prisma.file.update({
+          data: { uploadStatus: "FAILED" },
+          where: {
+            id: newDbFile.id,
+          },
+        });
+      }
 
       return { fileId: newDbFile.id };
     }),

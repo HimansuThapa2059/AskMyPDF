@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface FileType {
   id: string;
   createdAt: Date;
@@ -10,3 +12,14 @@ export interface FileType {
 }
 
 export type FileArray = FileType[];
+
+export const sendMessageValidator = z.object({
+  fileId: z.string(),
+  message: z.string(),
+});
+
+export const getFIleMessages = z.object({
+  limit: z.number().min(1).max(100).nullish(),
+  cursor: z.string().nullish(),
+  fileId: z.string(),
+});
